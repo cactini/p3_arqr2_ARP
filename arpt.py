@@ -1,5 +1,5 @@
 '''
-    practica2.py
+    arpt.py
     Programa principal que ejecuta resoluciones ARP. En este archivo No implementaremos nada.
     Autor: Javier Ramos <javier.ramos@uam.es> / Manuel Ruiz <manuel.ruiz.fernandez@uam.es >
     Editado por: Pablo Nicholas McGettrick Pallarés y Santiago Aguilera Gallego
