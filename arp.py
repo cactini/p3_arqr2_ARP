@@ -132,7 +132,17 @@ def createARPRequest(ip: int) -> bytes:
     global myMAC, myIP
     frame = bytes()
     logging.debug('Función no implementada')
-    # TODO implementar aqui
+    # DONE implementar aqui
+    '''
+        La trama tendrá la siguiente estructura:
+        |dstMAC|myMAC|ethType|HdType|PtType|HdSize|PtSize|op|myMAC|myIP|trgtMAC|trgtIP|
+        |6B    |6B   |2B     |2B    |2B    |1B    |1B    |2B|6B   |4B  |6B     |4B    |
+    '''
+    requestedIP = ip
+    ethType = 0x0806
+    op = 0x0001
+    emptyMAC = 0x000000000000
+    frame = broadcastAddr + myMAC + ethType + ARPHeader + op + myMAC + myIP + emptyMAC + ip
     # Aquí termina la implementación del alumno
     return frame
 
