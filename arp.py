@@ -1,10 +1,10 @@
 '''
     arp.py
     Implementación del protocolo ARP y funciones auxiliares que permiten realizar resoluciones de direcciones IP.
-    Autor: Javier Ramos <javier.ramos@uam.es> hola soy pablo
-    2019 EPS-UAM
+    Autor: Javier Ramos <javier.ramos@uam.es>
+    Editado por: Pablo Nicholas McGettrick Pallarés y Santiago Aguilera Gallego
+    2025 EPS-UAM
 '''
-
 
 from ethernet import *
 import logging
@@ -37,10 +37,10 @@ cacheLock = Lock()
 cache = ExpiringDict(max_len=100, max_age_seconds=10)
 
 
-def getIP(interface:str) -> int:
+def getIP(interface: str) -> int:
     '''
         Nombre: getIP
-        Descripción: Esta función obtiene la dirección IP asociada a una interfaz. Esta funció NO debe ser modificada
+        Descripción: Esta función obtiene la dirección IP asociada a una interfaz. Esta función NO debe ser modificada
         Argumentos:
             -interface: nombre de la interfaz
         Retorno: Entero de 32 bits con la dirección IP de la interfaz
@@ -89,6 +89,7 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
     '''
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    # Aquí termina la implementación del alumno
 
 
 def processARPReply(data: bytes, MAC: bytes) -> None:
@@ -114,23 +115,25 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
             -MAC: dirección MAC origen extraída por el nivel Ethernet
         Retorno: Ninguno
     '''
-    global requestedIP,resolvedMAC,awaitingResponse,cache
-    logging.debug('Función no implentada')    
+    global requestedIP, resolvedMAC, awaitingResponse, cache
+    logging.debug('Función no implentada')
     # TODO implementar aquí
+    # Aquí termina la implementación del alumno
 
 
 def createARPRequest(ip: int) -> bytes:
     '''
         Nombre: createARPRequest
         Descripción: Esta función construye una petición ARP y devuelve la trama con el contenido.
-        Argumentos: 
-            -ip: dirección a resolver 
+        Argumentos:
+            -ip: dirección a resolver
         Retorno: Bytes con el contenido de la trama de petición ARP
     '''
     global myMAC, myIP
     frame = bytes()
     logging.debug('Función no implementada')
     # TODO implementar aqui
+    # Aquí termina la implementación del alumno
     return frame
 
 
@@ -138,7 +141,7 @@ def createARPReply(IP: int, MAC: bytes) -> bytes:
     '''
         Nombre: createARPReply
         Descripción: Esta función construye una respuesta ARP y devuelve la trama con el contenido.
-        Argumentos: 
+        Argumentos:
             -IP: dirección IP a la que contestar
             -MAC: dirección MAC a la que contestar
         Retorno: Bytes con el contenido de la trama de petición ARP
@@ -147,14 +150,15 @@ def createARPReply(IP: int, MAC: bytes) -> bytes:
     frame = bytes()
     logging.debug('Función no implementada')
     # TODO implementar aqui
+    # Aquí termina la implementación del alumno
     return frame
 
 
 def process_arp_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, srcMac: bytes) -> None:
     '''
         Nombre: process_arp_frame
-        Descripción: Esta función procesa las tramas ARP. 
-            Se ejecutará por cada trama Ethenet que se reciba con Ethertype 0x0806 (si ha sido registrada en initARP). 
+        Descripción: Esta función procesa las tramas ARP.
+            Se ejecutará por cada trama Ethenet que se reciba con Ethertype 0x0806 (si ha sido registrada en initARP).
             Esta función debe realizar, al menos, las siguientes tareas:
                 -Extraer la cabecera común de ARP (6 primeros bytes) y comprobar que es correcta
                 -Extraer el campo opcode
@@ -171,6 +175,7 @@ def process_arp_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, src
     '''
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    # Aquí termina la implementación del alumno
 
 
 def initARP(interface: str) -> int:
@@ -185,13 +190,14 @@ def initARP(interface: str) -> int:
     global myIP, myMAC, arpInitialized
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    # Aquí termina la implementación del alumno
     return 0
 
 
 def ARPResolution(ip: int) -> bytes:
     '''
         Nombre: ARPResolution
-        Descripción: Esta función intenta realizar una resolución ARP para una IP dada y devuelve la dirección MAC asociada a dicha IP 
+        Descripción: Esta función intenta realizar una resolución ARP para una IP dada y devuelve la dirección MAC asociada a dicha IP
             o None en caso de que no haya recibido respuesta. Esta función debe realizar, al menos, las siguientes tareas:
                 -Comprobar si la IP solicitada existe en la caché:
                 -Si está en caché devolver la información de la caché
@@ -210,4 +216,5 @@ def ARPResolution(ip: int) -> bytes:
     global requestedIP, awaitingResponse, resolvedMAC
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    # Aquí termina la implementación del alumno
     return None

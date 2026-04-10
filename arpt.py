@@ -1,8 +1,9 @@
 '''
-    practica2.py
+    arpt.py
     Programa principal que ejecuta resoluciones ARP. En este archivo No implementaremos nada.
     Autor: Javier Ramos <javier.ramos@uam.es> / Manuel Ruiz <manuel.ruiz.fernandez@uam.es >
-    2020 EPS-UAM
+    Editado por: Pablo Nicholas McGettrick Pallarés y Santiago Aguilera Gallego
+    2025 EPS-UAM
 '''
 
 from ethernet import *
@@ -26,6 +27,7 @@ def printHelp():
     print("\tp : Imprime cache ARP\n")
     print("\th : Muestra la ayuda\n")
     # TODO g : ARP gratuito
+    # Aquí termina la implementación del alumno
     print("\tq : Salir del programa\n")
 
 
@@ -55,6 +57,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # TODO iniciar nivel EthMsg
+    # Aquí termina la implementación del alumno
 
     # Inicializamos ARP. Si no podemos inicializar salimos.
     if initARP(args.interface) == -1:
@@ -110,6 +113,7 @@ if __name__ == "__main__":
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
 
                 # TODO Envio Memsaje gratuito
+                # Aquí termina la implementación del alumno
 
             else:
                 print("Comando no reconocido. 'h' para ayuda.\n")
