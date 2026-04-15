@@ -200,6 +200,23 @@ def initARP(interface: str) -> int:
     global myIP, myMAC, arpInitialized
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    try:
+        myIP = getIP(interface)
+        myMAC = getHwAddr
+
+    except Exception as e:
+        logging.error(f"Error al encontrar IP o MAC de la interfaz {interface}: {e}")
+        return -1
+    
+    try: 
+        registerEthCallback(process_arp_frame, 0x806)
+    except Exception as e:
+        logging.error(f"Error al registrar Mensaje ARP: {e}")
+        return -1
+    
+    
+    arpInitialized = True
+
     # Aquí termina la implementación del alumno
     return 0
 
