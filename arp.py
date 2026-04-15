@@ -131,7 +131,6 @@ def createARPRequest(ip: int) -> bytes:
     '''
     global myMAC, myIP
     frame = bytes()
-    logging.debug('Función no implementada')
     # DONE implementar aqui
     '''
         La trama tendrá la siguiente estructura:
