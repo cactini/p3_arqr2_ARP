@@ -214,6 +214,28 @@ def process_arp_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, src
     '''
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    global ARPHeader
+
+    if len(data) < 28:
+        return
+    cabecera_recibida = data[0:6]
+    if cabecera_recibida != ARPHeader:
+        logging.debug("Cabecera ARP no coincide con cabecera Ethernet")
+        return
+    opcode = struct.unpack(data[6:8])[0]
+
+    if opcode == 1: #ARP request
+        logging.debug("ARP Request Recibido")
+        processARPRequest(data, srcMac)
+
+    elif opcode == 2: #ARPREply
+        logging.debug("Respuesta ARP recibida")
+        processARPReply(data, srcMac)
+
+    else: 
+        logging.debug("No se trata de Request/Reply ARP")
+        return
+
     # Aquí termina la implementación del alumno
 
 
