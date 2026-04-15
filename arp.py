@@ -88,7 +88,7 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
         Retorno: Ninguno
     '''
     logging.debug('Función no implementada')
-    # TODO implementar aquí
+    # DONE implementar aquí
     senderMAC = data[8:14]
     if senderMAC != MAC
         logging.debug("Mac de origen no coincide con MAC de ethernet")
