@@ -212,8 +212,7 @@ def process_arp_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, src
             -srcMac: MAC origen de la trama Ethernet que se ha recibido
         Retorno: Ninguno
     '''
-    logging.debug('Función no implementada')
-    # TODO implementar aquí
+    # DONE implementar aquí
     global ARPHeader
 
     if len(data) < 28:
