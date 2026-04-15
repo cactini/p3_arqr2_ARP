@@ -89,6 +89,30 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
     '''
     logging.debug('Función no implementada')
     # TODO implementar aquí
+    senderMAC = data[8:14]
+    if senderMAC != MAC
+        logging.debug("Mac de origen no coincide con MAC de ethernet")
+        return 
+    
+    senderIP = struct.unpack('!I', data[14:18])[0]
+
+    targetIP = struct.unpack('!I', data[24:28])[0]
+
+    if targetIP != myIP:
+        return
+    
+    logging.info(f"Solicitud ARP recibida")
+
+    with cacheLock:
+        cache[senderIP] = senderMAC
+    
+    reply_frame = createARPReply(senderIP, senderMAC)
+
+    if sendEthernetFrame(reply_frame, len(reply_frame), 0x0806, senderMAC) !=0:
+        logging.error("Error al enviar respuesta ARP")
+    else:
+        logging.info("Respuesta ARP enviada")
+
     # Aquí termina la implementación del alumno
 
 
@@ -242,5 +266,6 @@ def ARPResolution(ip: int) -> bytes:
     global requestedIP, awaitingResponse, resolvedMAC
     logging.debug('Función no implementada')
     # TODO implementar aquí
+
     # Aquí termina la implementación del alumno
     return None
