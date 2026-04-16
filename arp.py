@@ -281,7 +281,11 @@ def initARP(interface: str) -> int:
     try:
         myIP = getIP(interface)
         myMAC = getHwAddr(interface)
-        print(f"IP: {myIP}, MAC: {myMAC}\n")
+        ip_formateada = socket.inet_ntoa(struct.pack('!I', myIP))
+        mac_formateada = ':'.join(['{:02x}'.format(b) for b in myMAC])    
+
+        print(f"Inicializado: {ip_formateada} / {mac_formateada} ARP-T iniciado;")
+        print("usa 'h' para ver la ayuda.")
     except Exception as e:
         logging.error(f"Error al encontrar IP o MAC de la interfaz {interface}: {e}")
         return -1
