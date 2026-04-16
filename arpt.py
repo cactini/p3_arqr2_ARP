@@ -26,7 +26,7 @@ def printHelp():
     print("\ta <direccionIP> : Solicita ARP Request sobre la IP indicada\n")
     print("\tp : Imprime cache ARP\n")
     print("\th : Muestra la ayuda\n")
-    # TODO g : ARP gratuito
+    # DONE g : ARP gratuito
     # Aquí termina la implementación del alumno
     print("\tq : Salir del programa\n")
 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                 mensaje = " ".join(partes[1:])
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
 
-                # TODO Envio Memsaje gratuito
+                # DONE Envio Memsaje gratuito
                 # Aquí termina la implementación del alumno
 
             else:
