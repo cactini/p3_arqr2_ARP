@@ -41,7 +41,8 @@ def process_ethMsg_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, 
     # *******************************
     # PRACTICA: Procesar aquí el mensaje recibido DONE
     # *******************************
-
+    global canal
+    print("\n[DEBUG] He recibido una trama ethMsg")
     # Leemos el frame según el diagrama del enunciado:
     tiempo = data[0:20].decode()
     canal_recibido = data[20:30]
