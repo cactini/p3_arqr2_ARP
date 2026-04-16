@@ -112,6 +112,9 @@ if __name__ == "__main__":
                 partes = comando.split(" ")
                 mensaje = " ".join(partes[1:])
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
+                # DONE Envio Memsaje
+                ethmsg.enviar(args.interface, ip, mensaje)
+                # Aquí termina la implementación del alumno
 
             #TODO Envio Memsaje gratuito
             elif comando == 'g':
@@ -119,9 +122,6 @@ if __name__ == "__main__":
                 try:
                     myIP = getIP(args.interface)
                     ret = ARPResolution(myIP)
-                # DONE Envio Memsaje gratuito
-                ethmsg.enviar(args.interface, ip, mensaje)
-                # Aquí termina la implementación del alumno
 
                     if ret is not None:
                         mac_conflicto = ':'.join(['{:02X}'.format(b) for b in ret])
