@@ -93,6 +93,8 @@ def process_Ethernet_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes
         callback_func(us, header, payload, srcMac)  # si el protocolo esta en el diccionario, se busca la funcion asociada a la clave y se ejecuta. us y header (libreria pcap)
 
     else:
+        if etherType == 0xAAAA:
+            print("[DEBUG ETHERNET] ERROR: Descartado porque 0xAAAA no está en el Diccionario.")
         return
 
 
