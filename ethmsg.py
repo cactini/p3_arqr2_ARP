@@ -86,7 +86,7 @@ def unix_to_ddmmyyyy(unixtime: int) -> str:
 def enviar(interfaz, ip, mensaje):
 
     canal = "mensajes"
-    usuario = str(256 % ip)
+    usuario = str(ip % 256)
     macdestino = bytes([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
 
     cadena_bytes = mensaje.encode()
