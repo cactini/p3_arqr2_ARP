@@ -145,20 +145,16 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     print("Procesando Reply\n")
     MAC_origen = data[8:14]
     if MAC_origen != MAC:
-        print("BBBBB")
+        print(f"MAC_origen = {MAC_origen}")
+        print(f"MAC = {MAC}")
         return
 
     IP_origen = struct.unpack('!I', data[14:18])[0]
     MAC_dest = data[18:24]
     IP_dest = struct.unpack('!I', data[24:28])[0]
     if IP_dest != myIP or IP_origen != requestedIP:
-        print("AAAAAAAAAA")
-        IP_dest = ".".join(str((IP_dest >> (8 * i)) & 0xFF) for i in reversed(range(4)))
-        myIP_str = ".".join(str((myIP >> (8 * i)) & 0xFF) for i in reversed(range(4)))
-        IP_origen = ".".join(str((IP_origen >> (8 * i)) & 0xFF) for i in reversed(range(4)))
-        requestedIP = ".".join(str((requestedIP >> (8 * i)) & 0xFF) for i in reversed(range(4)))
         print(f"IP_dest = {IP_dest}\n")
-        print(f"myIP = {myIP_str}\n")
+        print(f"myIP = {myIP}\n")
         print(f"IP_origen = {IP_origen}\n")
         print(f"requestedIP = {requestedIP}\n")
         return
