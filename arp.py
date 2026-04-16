@@ -145,12 +145,14 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     print("Procesando Reply\n")
     MAC_origen = data[8:14]
     if MAC_origen != MAC:
+        print("BBBBB")
         return
 
     IP_origen = struct.unpack('!I', data[14:18])[0]
     MAC_dest = data[18:24]
     IP_dest = struct.unpack('!I', data[24:28])[0]
     if IP_dest != myIP or IP_origen != requestedIP:
+        print("AAAAAAAAAA")
         return
 
     with globalLock:
@@ -158,6 +160,7 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
         awaitingResponse = False
         requestedIP = None
 
+    print("pouque :(")
     with cacheLock:
         print(f"Añadiendo al caché {IP_dest} = {MAC_dest}\n")
         cache[IP_dest] = MAC_dest
