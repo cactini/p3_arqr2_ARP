@@ -87,6 +87,7 @@ def enviar(interfaz, ip, mensaje):
 
     canal = "mensajes"
     usuario = str(256 % ip)
+    macdestino = bytes([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF])
 
     cadena_bytes = mensaje.encode()
     longitud_camposiguiente = len(cadena_bytes)
