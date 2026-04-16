@@ -117,16 +117,19 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     '''
     global requestedIP, resolvedMAC, awaitingResponse, cache
     logging.debug('Función no implentada')
-    # TODO implementar aquí
+    # DONE implementar aquí
     MAC_origen = data[2:8]
     if MAC_origen != MAC:
         return
-    IP_origen = data[8:12]
+    # IP_origen = data[8:12]
     MAC_dest = data[12:18]
     IP_dest = data[18:22]
     if IP_dest != requestedIP:
         return
     resolvedMAC = MAC_origen
+    cache[MAC_dest] = IP_dest
+    awaitingResponse = False
+    requestedIP = None
 
     # Aquí termina la implementación del alumno
 
