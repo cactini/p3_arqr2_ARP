@@ -118,12 +118,12 @@ if __name__ == "__main__":
                     ret = ARPResolution(myIP)
 
                     if ret is not None:
-                        mac_conflicto = ':'.join['{:02X}'.format(b) for b in ret]
+                        mac_conflicto = ':'.join(['{:02X}'.format(b) for b in ret])
                         print(f"Conflicto: MAC {mac_conflicto} está usando IP de esta interfaz \n")
                     else:
                         print("ARP Gratuito terminado: Ninguna interfaz esta utilizando la IP de esta interfaz")
                 except Exception as e:
-                    print(f"Error al enviar ARO Gratuito: {e} \n")
+                    print(f"Error al enviar ARP Gratuito: {e} \n")
              # Aquí termina la implementación del alumno
             else:
                 print("Comando no reconocido. 'h' para ayuda.\n")
