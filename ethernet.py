@@ -37,7 +37,7 @@ def getHwAddr(interface: str):  # VIENE HECHO NO MODIFICAR
         NO MODIFICAR
     '''
     s = socket.socket(socket.AF_PACKET, socket.SOCK_RAW)
-    s.bind((interface,0))
+    s.bind((interface, 0))
     mac = (s.getsockname()[4])
     s.close()
     return mac
@@ -67,6 +67,10 @@ def process_Ethernet_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes
     '''
     logging.debug('Trama nueva. Función no implementada')
     global macAddress, broadcastAddr, EthernetProtocols
+
+    etherType = struct.unpack('!H', data[12:14])[0]
+    if etherType == 0xAAAA:  # 0xAAAA es el TYPE2 de tus mensajes
+        print("\n[DEBUG ETHERNET] ¡La tarjeta de red ha interceptado una trama de mensaje!")
 
     dstMac = data[0:6]
     srcMac = data[6:12]
