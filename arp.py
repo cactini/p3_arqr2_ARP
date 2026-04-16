@@ -287,9 +287,45 @@ def ARPResolution(ip: int) -> bytes:
                 -resolvedMAC: contiene la dirección MAC resuelta (en caso de que awaitingResponse) sea False.
             Como estas variables globales se leen y escriben concurrentemente deben ser protegidas con un Lock
     '''
-    global requestedIP, awaitingResponse, resolvedMAC
-    logging.debug('Función no implementada')
+    global requestedIP, awaitingResponse, resolvedMAC, arq_req
     # TODO implementar aquí
+    
 
+    with cacheLock:
+        if ip in cache:
+            logging.info("La IP ya estaba en el cache")
+            return cache[ip]
+
+    with globalLock:
+        requestedIP = ip
+        awaitingResponse = True
+        resolvedMAC = None
+
+    arq_req = createARPRequest(ip)
+
+    for intento in range(3):
+        logging.debug(f"Enviando intento {intento + 1}/3")
+        if sendEthernetFrame(arq_req, len(arq_req), 0x0806, broadcastAddr) != 0:
+            logging.error("fallo al enviar la trama Ethernet de peticion ARP")
+    
+        tiempo_esperado = 0.0
+        while tiempo_esperado < 1.0:
+            with globalLock:
+                if not awaitingResponse:
+                    break
+    
+        time.sleep(0.1)
+        tiempo_esperado += 0.1
+    
+        with globalLock:
+            if not awaitingResponse:
+                break #Para romper el bucle grande
+
+    with globalLock:
+        mac_final = resolvedMAC
+        requestedIP = None
+        awaitingResponse = False
+        resolvedMAC = None
+    return mac_final
     # Aquí termina la implementación del alumno
     return None
