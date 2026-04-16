@@ -142,18 +142,23 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     global requestedIP, resolvedMAC, awaitingResponse, cache
     logging.debug('Función no implentada')
     # DONE implementar aquí
-    MAC_origen = data[2:8]
+    MAC_origen = data[8:14]
     if MAC_origen != MAC:
         return
-    # IP_origen = data[8:12]
-    MAC_dest = data[12:18]
-    IP_dest = data[18:22]
-    if IP_dest != requestedIP:
+
+    IP_origen = struct.unpack('!I', data[14:18])[0]
+    MAC_dest = data[18:24]
+    IP_dest = struct.unpack('!I', data[24:28])[0]
+    if IP_dest != myIP or IP_origen != requestedIP:
         return
-    resolvedMAC = MAC_origen
-    cache[MAC_dest] = IP_dest
-    awaitingResponse = False
-    requestedIP = None
+
+    with globalLock:
+        resolvedMAC = MAC_origen
+        awaitingResponse = False
+        requestedIP = None
+
+    with cacheLock:
+        cache[MAC_dest] = IP_dest
 
     # Aquí termina la implementación del alumno
 
@@ -171,13 +176,15 @@ def createARPRequest(ip: int) -> bytes:
     # DONE implementar aqui
     '''
         La trama tendrá la siguiente estructura:
-        |dstMAC|myMAC|ethType|HdType|PtType|HdSize|PtSize|op|myMAC|myIP|trgtMAC|trgtIP|
-        |6B    |6B   |2B     |2B    |2B    |1B    |1B    |2B|6B   |4B  |6B     |4B    |
+        |HdType|PtType|HdSize|PtSize|op|myMAC|myIP|trgtMAC|trgtIP|
+        |2B    |2B    |1B    |1B    |2B|6B   |4B  |6B     |4B    |
     '''
-    ethType = 0x0806
-    op = 0x0001
-    emptyMAC = 0x000000000000
-    frame = broadcastAddr + myMAC + ethType + ARPHeader + op + myMAC + myIP + emptyMAC + ip
+    frame = ARPHeader
+    frame += struct.pack('!H', 0x0001)  # op
+    frame += myMAC
+    frame += struct.pack('!I', myIP)
+    frame += bytes(6)  # target MAC (empty)
+    frame += struct.pack('!I', ip)
     # Aquí termina la implementación del alumno
     return frame
 
@@ -196,12 +203,15 @@ def createARPReply(IP: int, MAC: bytes) -> bytes:
     # DONE implementar aqui
     '''
         La trama tendrá la siguiente estructura:
-        |dstMAC|myMAC|ethType|HdType|PtType|HdSize|PtSize|op|myMAC|myIP|trgtMAC|trgtIP|
-        |6B    |6B   |2B     |2B    |2B    |1B    |1B    |2B|6B   |4B  |6B     |4B    |
+        |HdType|PtType|HdSize|PtSize|op|myMAC|myIP|trgtMAC|trgtIP|
+        |2B    |2B    |1B    |1B    |2B|6B   |4B  |6B     |4B    |
     '''
-    ethType = 0x0806
-    op = 0x0002
-    frame = MAC + myMAC + ethType + ARPHeader + op + myMAC + myIP + MAC + IP
+    frame = ARPHeader
+    frame += struct.pack('!H', 0x0002)  # op
+    frame += myMAC
+    frame += struct.pack('!I', myIP)
+    frame += MAC
+    frame += struct.pack('!I', IP)
     # Aquí termina la implementación del alumno
     return frame
 
@@ -234,17 +244,17 @@ def process_arp_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, src
     if cabecera_recibida != ARPHeader:
         logging.debug("Cabecera ARP no coincide con cabecera Ethernet")
         return
-    opcode = struct.unpack(data[6:8])[0]
+    opcode = struct.unpack('!H', data[6:8])[0]
 
-    if opcode == 1: #ARP request
+    if opcode == 1:  # ARP request
         logging.debug("ARP Request Recibido")
         processARPRequest(data, srcMac)
 
-    elif opcode == 2: #ARPREply
+    elif opcode == 2:  # ARPREply
         logging.debug("Respuesta ARP recibida")
         processARPReply(data, srcMac)
 
-    else: 
+    else:
         logging.debug("No se trata de Request/Reply ARP")
         return
 
@@ -260,21 +270,36 @@ def initARP(interface: str) -> int:
             -Realizar una petición ARP gratuita y comprobar si la IP propia ya está asignada. En caso positivo se debe devolver error.
             -Marcar la variable de nivel ARP inicializado a True
     '''
-    global myIP, myMAC, arpInitialized
-    # TODO implementar aquí
+    global myIP, myMAC, arpInitialized, resolvedMAC, requestedIP
+    # DONE implementar aquí
+    try:
+            registerEthCallback(process_arp_frame, 0x0806)
+    except Exception as e:
+        logging.error(f"Error al registrar Mensaje ARP: {e}")
+        return -1
+
     try:
         myIP = getIP(interface)
         myMAC = getHwAddr(interface)
-
     except Exception as e:
         logging.error(f"Error al encontrar IP o MAC de la interfaz {interface}: {e}")
         return -1
 
-    try:
-        registerEthCallback(process_arp_frame, 0x806)
-    except Exception as e:
-        logging.error(f"Error al registrar Mensaje ARP: {e}")
-        return -1
+    with globalLock:
+        requestedIP = myIP
+        awaitingResponse = True
+        resolvedMAC = None
+
+    frame = createARPRequest(myIP)
+    sendEthernetFrame(frame, len(frame), 0x0806, broadcastAddr)
+    time.sleep(1)  # esperamos respuesta
+
+    with globalLock:
+        if not awaitingResponse:  # alguien respondió → IP duplicada
+            logging.error("IP duplicada en la red")
+            return -1
+        requestedIP = None
+        awaitingResponse = False
 
     arpInitialized = True
 
@@ -302,8 +327,7 @@ def ARPResolution(ip: int) -> bytes:
             Como estas variables globales se leen y escriben concurrentemente deben ser protegidas con un Lock
     '''
     global requestedIP, awaitingResponse, resolvedMAC, arq_req
-    # TODO implementar aquí
-    
+    # DONE implementar aquí
 
     with cacheLock:
         if ip in cache:
@@ -321,19 +345,18 @@ def ARPResolution(ip: int) -> bytes:
         logging.debug(f"Enviando intento {intento + 1}/3")
         if sendEthernetFrame(arq_req, len(arq_req), 0x0806, broadcastAddr) != 0:
             logging.error("fallo al enviar la trama Ethernet de peticion ARP")
-    
+
         tiempo_esperado = 0.0
         while tiempo_esperado < 1.0:
             with globalLock:
                 if not awaitingResponse:
                     break
-    
-        time.sleep(0.1)
-        tiempo_esperado += 0.1
-    
+            time.sleep(0.1)
+            tiempo_esperado += 0.1
+
         with globalLock:
             if not awaitingResponse:
-                break #Para romper el bucle grande
+                break  # Para romper el bucle grande
 
     with globalLock:
         mac_final = resolvedMAC
