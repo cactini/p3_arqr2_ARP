@@ -8,7 +8,7 @@
 
 from ethernet import *
 from arp import *
-from ethmsg import *
+# from ethmsg import *
 import sys
 import binascii
 import signal
@@ -55,9 +55,6 @@ if __name__ == "__main__":
     if startEthernetLevel(args.interface) != 0:
         logging.error('Ethernet no inicializado')
         sys.exit(-1)
-
-    # TODO iniciar nivel EthMsg
-    # Aquí termina la implementación del alumno
 
     # Inicializamos ARP. Si no podemos inicializar salimos.
     if initARP(args.interface) == -1:
