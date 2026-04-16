@@ -5,8 +5,7 @@ import signal
 from ethernet import *
 import threading
 import time
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timezone, timedelta
 
 TYPE1 = 0x4444
 TYPE2 = 0xAAAA
@@ -79,17 +78,10 @@ def process_ethMsg_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes, 
 
 
 def unix_to_ddmmyyyy(unixtime: int) -> str:
-    '''
-        Nombre: unix_to_ddmmyyyy()
-        Definición: Pasa el tiempo de formato unix (segundos desde 1/1/1970) a formato dd:mm:yyyy HH:MM:SS.
-        Argumentos: unixtime, que es el tiempo en formato unix.
-        Retorno: un string con el tiempo en formato dd:mm:yyyy HH:MM:SS.
-    '''
-    tz = ZoneInfo("Europe/Madrid")
+    tz = timezone(timedelta(hours=2))  # Spain current offset (CEST)
     fecha = datetime.fromtimestamp(unixtime, tz)
 
     return fecha.strftime("%d:%m:%Y_%H:%M:%S_")
-
 
 def enviar(interfaz, ip, mensaje):
 
