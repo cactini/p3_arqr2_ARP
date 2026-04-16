@@ -8,7 +8,7 @@
 
 from ethernet import *
 from arp import *
-# from ethmsg import *
+import ethmsg
 import sys
 import binascii
 import signal
@@ -56,6 +56,9 @@ if __name__ == "__main__":
     if startEthernetLevel(args.interface) != 0:
         logging.error('Ethernet no inicializado')
         sys.exit(-1)
+
+    # Inicializamos ethmsg
+        ethmsg.init_recibir(args.interface)
 
     # Inicializamos ARP. Si no podemos inicializar salimos.
     if initARP(args.interface) == -1:
@@ -116,6 +119,9 @@ if __name__ == "__main__":
                 try:
                     myIP = getIP(args.interface)
                     ret = ARPResolution(myIP)
+                # DONE Envio Memsaje gratuito
+                ethmsg.enviar(args.interface, ip, mensaje)
+                # Aquí termina la implementación del alumno
 
                     if ret is not None:
                         mac_conflicto = ':'.join(['{:02X}'.format(b) for b in ret])

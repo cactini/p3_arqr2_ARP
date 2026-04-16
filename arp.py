@@ -281,7 +281,9 @@ def initARP(interface: str) -> int:
     try:
         myIP = getIP(interface)
         myMAC = getHwAddr(interface)
-        print(f"IP: {myIP}, MAC: {myMAC}\n")
+        ip_str = ".".join(str((myIP >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+        mac_str = ":".join(f"{b:02x}" for b in myMAC)
+        print(f"IP: {ip_str}, MAC: {mac_str}\n")
     except Exception as e:
         logging.error(f"Error al encontrar IP o MAC de la interfaz {interface}: {e}")
         return -1
