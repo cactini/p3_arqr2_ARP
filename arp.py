@@ -87,7 +87,6 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
             -MAC: dirección MAC origen extraída por el nivel Ethernet
         Retorno: Ninguno
     '''
-    logging.debug('Función no implementada')
     # DONE implementar aquí
     senderMAC = data[8:14]
     if senderMAC != MAC
@@ -248,7 +247,6 @@ def initARP(interface: str) -> int:
             -Marcar la variable de nivel ARP inicializado a True
     '''
     global myIP, myMAC, arpInitialized
-    logging.debug('Función no implementada')
     # TODO implementar aquí
     try:
         myIP = getIP(interface)
