@@ -104,6 +104,7 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
     logging.info("Solicitud ARP recibida")
 
     with cacheLock:
+        print(f"Añadiendo al caché {senderIP} = {senderMAC}\n")
         cache[senderIP] = senderMAC
 
     reply_frame = createARPReply(senderIP, senderMAC)
