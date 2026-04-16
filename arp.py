@@ -143,6 +143,9 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     global requestedIP, resolvedMAC, awaitingResponse, cache
     # DONE implementar aquí
     print("Procesando Reply\n")
+    with globalLock:
+        if not awaitingResponse:
+            return
     MAC_origen = data[8:14]
     '''
     if MAC_origen != MAC:
