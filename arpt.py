@@ -113,6 +113,7 @@ if __name__ == "__main__":
                 mensaje = " ".join(partes[1:])
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
                 # DONE Envio Memsaje
+                ip = getIP(args.interface)
                 ethmsg.enviar(args.interface, ip, mensaje)
                 # Aquí termina la implementación del alumno
 
