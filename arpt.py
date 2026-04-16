@@ -123,9 +123,6 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Error al enviar ARO Gratuito: {e} \n")
              # Aquí termina la implementación del alumno
-
-
-
             else:
                 print("Comando no reconocido. 'h' para ayuda.\n")
 
