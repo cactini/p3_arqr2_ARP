@@ -94,8 +94,8 @@ def enviar(interfaz, ip, mensaje):
 
     tiempo = time.time()
     tiempo_b = unix_to_ddmmyyyy(tiempo).encode()
-    canal_b = canal.encode()
-    user_b = usuario.encode()
+    canal_b = canal.encode().ljust(10, b'\x00')
+    user_b = usuario.encode().ljust(10, b'\x00')
     len_b = len(cadena_bytes)
     len_b = len_b.to_bytes(4, byteorder="big")
     trama_chat = tiempo_b + canal_b + user_b + len_b + cadena_bytes
