@@ -26,7 +26,8 @@ def printHelp():
     print("\ta <direccionIP> : Solicita ARP Request sobre la IP indicada\n")
     print("\tp : Imprime cache ARP\n")
     print("\th : Muestra la ayuda\n")
-    # DONE g : ARP gratuito
+    # TODO g : ARP gratuito
+    print("\tg : Solicita una ARP gratuita")
     # Aquí termina la implementación del alumno
     print("\tq : Salir del programa\n")
 
@@ -109,8 +110,21 @@ if __name__ == "__main__":
                 mensaje = " ".join(partes[1:])
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
 
-                # DONE Envio Memsaje gratuito
-                # Aquí termina la implementación del alumno
+            #TODO Envio Memsaje gratuito
+            elif commando.startswith("g "):
+                myIP = getIP(args.interface)
+                ret = ARPResolution(mi_ip)
+
+                if ret is not None:
+                    mac_conflicto = ':'.join['{:02X}'.format(b) for b in ret]
+                    print(f"Conflicto: MAC {mac_conflicto} está usando IP de esta interfaz \n")
+                else:
+                    print("ARP Gratuito terminado: Ninguna interfaz esta utilizando la IP de esta interfaz")
+        except Exception as e:
+            print(f"Error al enviar ARO Gratuito: {e} \n")
+             # Aquí termina la implementación del alumno
+
+
 
             else:
                 print("Comando no reconocido. 'h' para ayuda.\n")
