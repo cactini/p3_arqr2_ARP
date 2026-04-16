@@ -8,7 +8,7 @@
 
 from ethernet import *
 from arp import *
-# from ethmsg import *
+import ethmsg
 import sys
 import binascii
 import signal
@@ -55,6 +55,9 @@ if __name__ == "__main__":
     if startEthernetLevel(args.interface) != 0:
         logging.error('Ethernet no inicializado')
         sys.exit(-1)
+
+    # Inicializamos ethmsg
+        ethmsg.init_recibir(args.interface)
 
     # Inicializamos ARP. Si no podemos inicializar salimos.
     if initARP(args.interface) == -1:
@@ -110,6 +113,7 @@ if __name__ == "__main__":
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
 
                 # DONE Envio Memsaje gratuito
+                ethmsg.enviar(args.interface, ip, mensaje)
                 # Aquí termina la implementación del alumno
 
             else:
