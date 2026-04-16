@@ -169,7 +169,7 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     print("pouque :(")
     with cacheLock:
         print(f"Añadiendo al caché {IP_dest} = {MAC_dest}\n")
-        cache[IP_dest] = MAC_dest
+        cache[IP_origen] = MAC_origen
 
     # Aquí termina la implementación del alumno
 
