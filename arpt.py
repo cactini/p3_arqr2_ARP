@@ -111,20 +111,22 @@ if __name__ == "__main__":
                 print(f"Enviando mensaje de {len(mensaje)} Bytes: {mensaje}")
 
             #TODO Envio Memsaje gratuito
-            elif commando.startswith("g "):
-                myIP = getIP(args.interface)
-                ret = ARPResolution(mi_ip)
+            elif comando == 'g':
+                print("ARP Gratuito...")
+                try:
+                    myIP = getIP(args.interface)
+                    ret = ARPResolution(myIP)
 
-                if ret is not None:
-                    mac_conflicto = ':'.join['{:02X}'.format(b) for b in ret]
-                    print(f"Conflicto: MAC {mac_conflicto} está usando IP de esta interfaz \n")
-                else:
-                    print("ARP Gratuito terminado: Ninguna interfaz esta utilizando la IP de esta interfaz")
-        except Exception as e:
-            print(f"Error al enviar ARO Gratuito: {e} \n")
+                    if ret is not None:
+                        mac_conflicto = ':'.join['{:02X}'.format(b) for b in ret]
+                        print(f"Conflicto: MAC {mac_conflicto} está usando IP de esta interfaz \n")
+                    else:
+                        print("ARP Gratuito terminado: Ninguna interfaz esta utilizando la IP de esta interfaz")
+                except Exception as e:
+                    print(f"Error al enviar ARO Gratuito: {e} \n")
              # Aquí termina la implementación del alumno
-        else:
-            print("Comando no reconocido. 'h' para ayuda.\n")
+            else:
+                print("Comando no reconocido. 'h' para ayuda.\n")
 
         except KeyboardInterrupt:
             print('\n')
