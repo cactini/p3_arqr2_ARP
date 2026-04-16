@@ -153,6 +153,14 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     IP_dest = struct.unpack('!I', data[24:28])[0]
     if IP_dest != myIP or IP_origen != requestedIP:
         print("AAAAAAAAAA")
+        IP_dest = ".".join(str((IP_dest >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+        myIP_str = ".".join(str((myIP >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+        IP_origen = ".".join(str((IP_origen >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+        requestedIP = ".".join(str((requestedIP >> (8 * i)) & 0xFF) for i in reversed(range(4)))
+        print(f"IP_dest = {IP_dest}\n")
+        print(f"myIP = {myIP_str}\n")
+        print(f"IP_origen = {IP_origen}\n")
+        print(f"requestedIP = {requestedIP}\n")
         return
 
     with globalLock:
