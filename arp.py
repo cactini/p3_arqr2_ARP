@@ -158,7 +158,7 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
         requestedIP = None
 
     with cacheLock:
-        cache[MAC_dest] = IP_dest
+        cache[IP_dest] = MAC_dest
 
     # Aquí termina la implementación del alumno
 
