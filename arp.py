@@ -109,7 +109,7 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
 
     reply_frame = createARPReply(senderIP, senderMAC)
 
-    if sendEthernetFrame(reply_frame, len(reply_frame), 0x0806, myMAC) != 0:
+    if sendEthernetFrame(reply_frame, len(reply_frame), 0x0806, senderMAC) != 0:
         logging.error("Error al enviar respuesta ARP")
     else:
         logging.info("Respuesta ARP enviada")
@@ -144,10 +144,12 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     # DONE implementar aquí
     print("Procesando Reply\n")
     MAC_origen = data[8:14]
+    '''
     if MAC_origen != MAC:
         print(f"MAC_origen = {MAC_origen}")
         print(f"MAC = {MAC}")
         return
+    '''
 
     IP_origen = struct.unpack('!I', data[14:18])[0]
     MAC_dest = data[18:24]
