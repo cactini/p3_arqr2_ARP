@@ -104,7 +104,6 @@ def processARPRequest(data: bytes, MAC: bytes) -> None:
     logging.info("Solicitud ARP recibida")
 
     with cacheLock:
-        print(f"Añadiendo al caché {senderIP} = {senderMAC}\n")
         cache[senderIP] = senderMAC
 
     reply_frame = createARPReply(senderIP, senderMAC)
@@ -158,10 +157,6 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
     MAC_dest = data[18:24]
     IP_dest = struct.unpack('!I', data[24:28])[0]
     if IP_dest != myIP or IP_origen != requestedIP:
-        print(f"IP_dest = {IP_dest}\n")
-        print(f"myIP = {myIP}\n")
-        print(f"IP_origen = {IP_origen}\n")
-        print(f"requestedIP = {requestedIP}\n")
         return
 
     with globalLock:
@@ -169,9 +164,7 @@ def processARPReply(data: bytes, MAC: bytes) -> None:
         awaitingResponse = False
         requestedIP = None
 
-    print("pouque :(")
     with cacheLock:
-        print(f"Añadiendo al caché {IP_dest} = {MAC_dest}\n")
         cache[IP_origen] = MAC_origen
 
     # Aquí termina la implementación del alumno

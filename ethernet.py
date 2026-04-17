@@ -73,15 +73,7 @@ def process_Ethernet_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes
 
     etherType = struct.unpack('!H', data[12:14])[0]  # el ethertype es un numero de 2 bytes, !H nos dice el formato de red (!) y uint de 2 bytes(H) (https://stackoverflow.com/questions/19287296/how-to-change-one-byte-int-to-two-bytes-in-python)
 
-    if etherType == 0xAAAA:  # 0xAAAA es el TYPE2 de tus mensajes
-        print("\n[DEBUG ETHERNET] ¡Trama 0xAAAA interceptada!")
-        print(f"  -> MAC Destino de la trama: {dstMac}")
-        print(f"  -> Broadcast configurado: {broadcastAddr}")
-        print(f"  -> Diccionario de Protocolos: {EthernetProtocols}")
-
     if (dstMac != macAddress and dstMac != broadcastAddr):
-        if etherType == 0xAAAA:
-            print("[DEBUG ETHERNET] ERROR: Descartado por culpa de la MAC.")
         return
 
     if (dstMac != macAddress and dstMac != broadcastAddr):
@@ -93,8 +85,6 @@ def process_Ethernet_frame(us: ctypes.c_void_p, header: pcap_pkthdr, data: bytes
         callback_func(us, header, payload, srcMac)  # si el protocolo esta en el diccionario, se busca la funcion asociada a la clave y se ejecuta. us y header (libreria pcap)
 
     else:
-        if etherType == 0xAAAA:
-            print("[DEBUG ETHERNET] ERROR: Descartado porque 0xAAAA no está en el Diccionario.")
         return
 
 
