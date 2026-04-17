@@ -27,7 +27,7 @@ def printHelp():
     print("\tp : Imprime cache ARP\n")
     print("\th : Muestra la ayuda\n")
     # TODO g : ARP gratuito
-    print("\tg : Solicita una ARP gratuita")
+    print("\tg : Solicita una ARP gratuita\n")
     # Aquí termina la implementación del alumno
     print("\tq : Salir del programa\n")
 
