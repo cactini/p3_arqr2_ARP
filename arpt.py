@@ -58,7 +58,7 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     # Inicializamos ethmsg
-        ethmsg.init_recibir(args.interface)
+    ethmsg.init_recibir(args.interface)
 
     # Inicializamos ARP. Si no podemos inicializar salimos.
     if initARP(args.interface) == -1:
